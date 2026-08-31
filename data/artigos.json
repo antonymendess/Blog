@@ -1,0 +1,68 @@
+[
+  {
+    "title": "Entendendo o App Router do Next.js 15",
+    "author": "Camila Duarte",
+    "date": "2026-08-10",
+    "excerpt": "Como o App Router organiza rotas, layouts e componentes de servidor para aplicações modernas.",
+    "content": [
+      "O App Router, introduzido no Next.js 13 e consolidado nas versões seguintes, muda a forma como organizamos rotas em uma aplicação React. Em vez de arquivos soltos em uma pasta pages, cada rota vive dentro da pasta app como uma subpasta com um arquivo page.tsx.",
+      "Essa estrutura baseada em pastas permite compor layouts compartilhados, arquivos de loading e error específicos por segmento de rota, além de rotas dinâmicas usando colchetes, como app/artigos/[slug]/page.tsx.",
+      "Por padrão, todo componente dentro de app é um Server Component. Isso significa que ele pode ser assíncrono e buscar dados diretamente, sem precisar de useEffect ou de bibliotecas de data fetching no cliente."
+    ]
+  },
+  {
+    "title": "Server Components na prática: buscando dados sem useEffect",
+    "author": "Rafael Nogueira",
+    "date": "2026-08-14",
+    "excerpt": "Veja como declarar uma página como função assíncrona e buscar dados diretamente no servidor.",
+    "content": [
+      "Antes do App Router, buscar dados em uma página React geralmente exigia useEffect combinado com useState, gerando um carregamento visível e código repetitivo em cada componente.",
+      "Com Server Components, a própria função da página pode ser assíncrona: export default async function Page() { const dados = await buscarDados(); ... }. O React e o Next.js cuidam de esperar essa Promise antes de renderizar o HTML.",
+      "O resultado é um HTML já preenchido com os dados na primeira resposta do servidor, o que melhora tanto a performance percebida quanto a indexação por mecanismos de busca."
+    ]
+  },
+  {
+    "title": "SSG, SSR e o segredo do generateStaticParams",
+    "author": "Camila Duarte",
+    "date": "2026-08-19",
+    "excerpt": "A diferença entre force-static, force-dynamic e como pré-gerar páginas dinâmicas com generateStaticParams.",
+    "content": [
+      "No App Router, o modo de renderização de uma rota é decidido automaticamente, mas pode ser controlado explicitamente com a exportação dynamic: 'force-static' força geração estática (SSG), enquanto 'force-dynamic' força renderização a cada requisição (SSR).",
+      "Para rotas dinâmicas, como artigos com slug variável, a função generateStaticParams informa ao Next.js quais valores de slug existem, permitindo que cada artigo seja pré-renderizado em tempo de build, exatamente como getStaticPaths fazia no antigo Pages Router.",
+      "Quando os dados vêm de uma fonte que muda raramente, como um JSON local ou um CMS com baixa frequência de atualização, SSG é a escolha ideal: as páginas ficam prontas como HTML estático, extremamente rápidas e ótimas para SEO."
+    ]
+  },
+  {
+    "title": "SEO dinâmico com generateMetadata",
+    "author": "Bruno Alencar",
+    "date": "2026-08-22",
+    "excerpt": "Como gerar título, descrição e Open Graph diferentes para cada página dinamicamente.",
+    "content": [
+      "A função generateMetadata é a versão assíncrona e dinâmica da exportação estática metadata. Ela recebe os mesmos params da página e pode buscar dados para montar um title e description específicos daquele conteúdo.",
+      "Isso é essencial em um blog: cada artigo precisa de um title e description próprios, ao invés de um mesmo texto genérico repetido em todas as páginas, o que prejudicaria o SEO e a taxa de cliques nos resultados de busca.",
+      "Também é possível preencher openGraph e twitter dentro do retorno de generateMetadata, melhorando a forma como o link é exibido ao ser compartilhado em redes sociais."
+    ]
+  },
+  {
+    "title": "Gerando slugs amigáveis com a biblioteca slugify",
+    "author": "Rafael Nogueira",
+    "date": "2026-08-27",
+    "excerpt": "Como transformar o título de um artigo em uma URL limpa e legível usando slugify.",
+    "content": [
+      "Uma URL amigável, como /artigos/seo-dinamico-com-generatemetadata, é mais legível para pessoas e mais bem interpretada por mecanismos de busca do que uma URL com um identificador numérico ou um hash.",
+      "A biblioteca slugify converte um texto qualquer, com acentos, espaços e maiúsculas, em uma string normalizada separada por hífens. Basta chamar slugify(titulo, { lower: true, strict: true }) para obter um slug consistente.",
+      "Nesta aplicação, o slug de cada artigo é gerado a partir do título assim que os dados são carregados, garantindo que a rota dinâmica app/artigos/[slug]/page.tsx encontre sempre o conteúdo correto."
+    ]
+  },
+  {
+    "title": "Boas práticas de acessibilidade e performance em blogs Next.js",
+    "author": "Bruno Alencar",
+    "date": "2026-08-30",
+    "excerpt": "Pequenos ajustes de HTML semântico e carregamento que fazem grande diferença em produção.",
+    "content": [
+      "Usar tags semânticas como article, header, time e nav ajuda tanto leitores de tela quanto rastreadores de busca a entender a estrutura de uma página de blog.",
+      "O componente next/image otimiza automaticamente imagens, servindo tamanhos e formatos adequados a cada dispositivo, o que reduz o tempo de carregamento sem esforço manual do desenvolvedor.",
+      "Por fim, gerar páginas estaticamente sempre que possível, como fazemos aqui com generateStaticParams, elimina consultas repetidas de dados em produção e entrega o conteúdo já pronto direto de uma CDN."
+    ]
+  }
+]
